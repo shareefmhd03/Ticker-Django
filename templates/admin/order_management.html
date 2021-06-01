@@ -1,0 +1,128 @@
+
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+{% block contend %}
+
+<h3 class="text-center" style="color: rgb(70, 159, 241);">Order Managment</h3>
+<div class="table-responsive">
+    <table class="table align-items-center table-flush">
+      <form action="" method="POST">
+      <thead class="thead-dark">
+        <tr>
+          <th style="color: white;" scope="col" class="sort" data-sort="name">Order No</th>
+          <th scope="col" class="sort" style="color: white;" data-sort="budget">User</th>
+          <th scope="col" class="sort" data-sort="status" style="color: white;">Shipping Address</th>
+          <th scope="col" style="color: white;">Date</th>
+          <th scope="col" class="sort" data-sort="completion" style="color: white;">Amount</th>
+          <th scope="col" class="sort" data-sort="completion" style="color: white;">Status</th>
+          
+          <th scope="col" style="color: white;">Payment Method</th>
+          <th scope="col" style="color: white;">Action</th>
+          <th scope="col" class="sort" data-sort="completion" style="color: white;"> Shipping Status</th>
+          
+        </tr>
+      </thead>
+      <tbody class="list">
+        {% for ord in order %}
+        <tr>
+          <th scope="row">
+            <div class="media align-items-center">
+              
+              <div class="media-body">
+               <a href="{% url 'view_orders' ord.id %}"> <span class="name mb-0 text-sm">{{ord.order_no}}</span></a>
+              </div>
+            </div>
+          </th>
+          <td class="media-body">
+            <span class="name mb-0 text-sm">{{ord.user}}</span>
+          </td>
+          <td>
+            <span class="badge badge-dot mr-4">
+              
+              <span class="status">{{ord.email}}<br>{{ord.phone}}{{ord.address}},{{ord.city}},{{ord.state}}</span>
+            </span>
+          </td>
+          <td> 
+            <span class="badge badge-dot mr-4">
+              
+              <span class="status">{{ord.created_at}}</span>
+            </span>
+          </td>
+          <td>
+            <div class="media-body"> 
+              <span class="status">{{ord.order_total}}</span>
+              
+            </div>
+          </td>
+          <td>
+            {% if ord.status == 'cancelled' %}
+            <span class="status text-danger">{{ord.status}}</span>
+            {% elif ord.status == 'cancelled by user'  %}
+            <span class="status text-danger">{{ord.status}}</span>
+
+            {%elif ord.status == 'pending' %}
+            <span class="status text-yellow">{{ord.status}}</span>
+            {%else%}
+            <span class="status text-success">{{ord.status}}</span>
+            {% endif %}
+          </td>
+          
+          <td>
+            <div class="media-body">
+              <span class="status">{{ord.payment.payment_method}}</span>
+              
+            </div>
+          </td>
+          <td>
+            
+            <div class="media-body">
+              
+              {% if ord.status == 'cancelled by user' %}
+              <h6 class="text-secondary">Not Available</h6>
+              
+              {% elif ord.is_ordered == True %}
+              <a href="{% url 'cancel_order' ord.id %}" class="text-danger btn btn-outline-danger">cancel</a>
+
+            
+              {% endif %}
+              
+            </div>
+          </td>
+
+
+          
+          
+        
+      
+      
+    </form>
+    <td>
+      {% if ord.status == 'Order placed' %}
+      <span class="text-success" style="font-size: larger;">{{ord.shipping_status}}</span>
+      <form action="{% url 'shipping_status' ord.id %}" method="POST">
+        {% csrf_token %}
+        <div class="form-row field-status">
+          <div>
+          <label class="required" for="id_status">Status:</label>                        
+            <select name="shipping_status" id="id_status">    
+            <option selected="">Choose..</option>
+            <option value="Order placed">Order placed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Out for delivery">Out For Delivery</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled" >Cancelled</option>
+          </select>    
+          </div>            
+          </div>
+          <input type="submit" class="btn btn-sm btn-dark" value="update" > 
+        </form> 
+   
+        {%endif%}
+    </td>
+    {% endfor %}
+  </tr>
+  </tbody>
+    </table>
+  </div>
+
+{% endblock %}

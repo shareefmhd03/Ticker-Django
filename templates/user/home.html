@@ -1,0 +1,98 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block contend %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+	.rate > input{
+		display: none;
+	}
+
+	.rate{
+		display: inline-block;
+		border: 0;
+	}
+	.rate > label{
+		float: right;
+	}
+
+	.rate > label::before{
+		display: inline-block;
+		font-size: 1.1rem;
+		font-family: FontAwesome;
+		content: "\f005";
+		margin: 0;
+		padding: 0.3rem, .2rem;
+		cursor: pointer;
+	}
+	.rate .half::before{
+		content: "\f089";
+		position: absolute;
+		padding-right: 0;
+	}
+
+	input:checked ~ label, label:hover ~ label{
+		color: #ffb503;
+	}
+
+	input:checked + label:hover,input:checked ~ label:hover, input:checked ~ label:hover~ label,
+	label:hover ~ input:checked ~ label{
+		color: #cc9000;
+	}
+	.ratingstar i{
+		color: #ffb503;
+	}
+ </style>
+
+
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+	<div class="container">
+
+		<div class="intro-banner-wrap">
+			<img src="{% static 'images/1-frederique-constant-banner-wallpaper-preview.jpeg' %}"
+				class="img-fluid rounded" style="width: 100%;">
+		</div>
+
+	</div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm">
+	<div class="container">
+
+		<div class="row">
+
+			{% for product in product %}
+			<div class="col-md-3 mt-2">
+				<div class="card card-product-grid h-100 ">
+					<a href="{{product.get_url}}" class="img-wrap"> <img src="{{ product.image1.url }}"> </a>
+					<figcaption class="info-wrap">
+						<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
+						<div class="ratingstar">
+							<span>
+								<i class="fa fa-star{% if product.average_review < 0.5 %}-o{%elif product.average_review  >= 0.5 and product.average_review < 1 %}-half-o {%endif%}" aria-hidden="true"></i>
+								<i class="fa fa-star{% if product.average_review < 1.5 %}-o{%elif product.average_review  >= 1.5 and product.average_review < 2 %}-half-o {%endif%}" aria-hidden="true"></i>
+								<i class="fa fa-star{% if product.average_review < 2.5 %}-o{%elif product.average_review  >= 2.5 and product.average_review < 3 %}-half-o {%endif%}" aria-hidden="true"></i>
+								<i class="fa fa-star{% if product.average_review < 3.5 %}-o{%elif product.average_review  >= 3.5 and product.average_review < 4 %}-half-o {%endif%}" aria-hidden="true"></i>
+								<i class="fa fa-star{% if product.average_review < 4.5 %}-o{%elif product.average_review  >= 4.5 and product.average_review < 5 %}-half-o {%endif%}" aria-hidden="true"></i>
+							</span>
+						</div>
+						<div class="price mt-1">{{product.brand}}</div>
+						<div class="price mt-1">₹{{product.price}}</div>
+						<a href="{% url 'add_to_cart' product.id %}" class="btn btn-block btn-dark"
+							style="position: relative;">Add to cart </a>
+					</figcaption>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+
+	</div>
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+{% endblock %}

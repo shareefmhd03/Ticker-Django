@@ -1,0 +1,93 @@
+
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+{% block contend %}
+
+<h3 class="text-center" style="color: rgb(70, 159, 241);">Category Managment</h3>
+
+    <button style="float: left;"  type="button" class="btn btn-info btn-sm my-3" onclick="asd(1)" id="insert" value="Add new Product"><i class="material-icons">&#xe145;</i>Add Category</button>
+    <form action="{% url 'add_category' %}" method="POST" id="asd" class="mt-4" >
+    {% csrf_token %}
+        <input type="text" required oninvalid="setCustomValidity(' ')" onchange="setCustomValidity('')" placeholder="category" name="category_name">
+        <input  type="text" placeholder="slug"  name="slugs">
+        <input class="btn btn-sm btn-success" type="submit" value="Save">
+      <input type="button" value="cancel" class="btn btn-sm btn-danger" onclick="asd(0)" >
+</form>
+
+
+<div class="table-responsive">
+    <table class="table align-items-center table-flush">
+      <thead class="thead-dark" >
+        <tr>
+
+          <th style="color: white;" scope="col" class="sort" data-sort="name">ID</th>
+          <th style="color: white;" scope="col" class="sort" data-sort="name">Category</th>
+          <th style="color: white;" scope="col" class="sort" data-sort="budget">Slug</th>
+          <th style="color: white;" scope="col" class="sort" data-sort="budget">Actions</th>
+         
+        </tr>
+      </thead>
+      {% for categ in cat %}
+      <tbody class="list">
+        <tr>
+          <th scope="row">
+            <div class="media align-items-center">
+              
+              <div class="media-body">
+                <span class="name mb-0 text-sm">{{categ.id}}</span>
+              </div>
+            </div>
+          </th>
+          <td class="media-body">
+            <span class="name mb-0 text-sm">{{categ.category_name}}</span>
+          </td>
+          <td>
+            <span class="badge badge-dot mr-4">
+              <span class="status">{{categ.slug}}</span>
+            </span>
+          </td>
+          <td>
+            <div class="">  
+              <a href="{% url 'del_category' categ.id %}" class="delete" onclick="return confirm('Are you sure you want to Remove?');" ><i class="material-icons ml-5"  title="Delete">&#xE872;</i></a>
+              <a href="{% url  'edit_category' categ.id%}"  ><i class="material-icons ml-5"   title="Edit">&#xE254;</i></a>
+            </div></td>
+          
+        </tr>
+      </tbody>
+      
+      {% endfor %}
+    </table>
+    
+  </div>
+  
+
+  
+
+  
+ 
+</div>
+
+  
+  <script type="text/javascript">
+  
+    window.onload = function() {
+  
+      
+      document.getElementById("asd").style.display = "none";
+      
+
+    };
+  
+    function asd(a) {
+    
+      if (a == 1) {
+        document.getElementById("asd").style.display = "block";
+      } else {
+        document.getElementById("asd").style.display = "none";
+      }
+        
+    }
+  </script>
+
+
+{% endblock %}

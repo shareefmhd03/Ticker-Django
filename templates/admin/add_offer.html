@@ -1,0 +1,33 @@
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+{% block contend %}
+
+
+
+<div class="container">
+    <section class="section-content padding-y">
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Offer name</label>
+                <input type="text" class="form-control" name="offer_name" maxlength="25" id="id_offer_name">
+            </div> <!-- form-group end.// -->
+            <div class="form-group">
+                <label>Offer Percentage</label>
+                <input type="number" class="form-control" name="off_percentage" id="id_off_percentage">
+            </div> <!-- form-group end.// -->
+            <div class="form-group">
+                <label>Valid From</label>
+                <input type="text" class="form-control" name="valid_from" id="id_valid_from">
+            </div> <!-- form-group end.// -->
+            <div class="form-group">
+                <label>Valid Upto</label>
+                <input type="text" class="form-control" name="valid_upto" id="id_valid_upto">
+            </div> <!-- form-group end.// -->
+
+
+            <input type="submit" class="btn btn-primary" name="" id="" value="Add Offer">
+        </form>
+        {% endblock %}

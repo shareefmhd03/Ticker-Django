@@ -1,0 +1,170 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block contend %}
+
+<style>
+  body {
+    background-color: #eee
+}
+
+.date {
+    font-size: 11px
+}
+
+.divider {
+    height: 0px !important;
+    background-color: blue
+}
+
+.track-line {
+    height: 2px !important;
+    background-color: green
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 0px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block
+}
+
+.big-dot {
+    height: 25px;
+    width: 25px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block
+}
+
+.big-dot i {
+    font-size: 12px
+}
+</style>
+
+
+
+
+
+{% for ord in order %}
+<div class="container mt-5">
+  <div class="row">
+      <div class="col-md-12">
+          <div class="bg-white p-2 border rounded px-3">
+            
+              
+             
+                
+                {% if ord.order.shipping_status == 'None'%}
+                <div class="d-flex flex-row justify-content-between align-items-center order">
+                  <div class="d-flex flex-column order-details"><span>Your order has been delivered</span><span class="date">by DHFL on {{ord.created_at}}</span></div>
+                  <div class="tracking-details"><button class="btn btn-outline-primary btn-sm" type="button">Track order details</button></div>
+              </div>
+             
+                <hr class="divider mb-4">
+                <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
+                    
+                    <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"></i></span></div>
+                
+               
+
+                  {% elif ord.order.shipping_status == 'Order placed' %}
+                  <div class="d-flex flex-row justify-content-between align-items-center order">
+                    <div class="d-flex flex-column order-details"><span>Your order has been placed</span><span class="date">by DHFL on {{ord.created_at}}</span></div>
+                   
+                </div>
+
+                   <div class="aside"><img src="{{ord.product.image1.url}}" class="img-sm">
+                    {{ord.product.product_name}} </div>
+                  <hr class="divider mb-4">
+                <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
+                    <hr class="flex-fill track-lin"><span class="dot"></span>
+                    <hr class="flex-fill track-lin"><span class="dot"></span>
+
+                    <hr class="flex-fill track-lin"><span class="d-flex justify-content-center align-items-center big-dot dot"></i></span></div>
+                
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                      <div class="d-flex flex-column align-items-start"><span>{{ord.updated_at}}</span><span>Order placed</span></div>
+                      <div class="d-flex flex-column justify-content-center"><span></span><span>Shipped</span></div>
+                      <div class="d-flex flex-column justify-content-center align-items-center"><span></span><span>Out for Delivery</span></div>
+                      <div class="d-flex flex-column align-items-end"><span></span><span>Delivered</span></div>
+                  </div>
+                
+                  {% elif ord.order.shipping_status == 'Shipped' %}
+                  <div class="d-flex flex-row justify-content-between align-items-center order">
+                    <div class="d-flex flex-column order-details"><span>Your order has been shipped</span><span class="date">by DHFL on {{ord.created_at}}</span></div>
+                    
+                </div>
+                <div class="aside"><img src="{{ord.product.image1.url}}" class="img-sm">
+                  {{ord.product.product_name}} </div>
+                  <hr class="divider mb-4">
+                <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
+                    <hr class="flex-fill track-line"><span class="dot"></span>
+                    <hr class="flex-fill track-lin"><span class="dot"></span>
+ 
+                    <hr class="flex-fill track-lin"><span class="d-flex justify-content-center align-items-center big-dot dot"></i></span></div>
+                
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                      <div class="d-flex flex-column align-items-start"><span>{{ord.updated_at}}</span><span>Order placed</span></div>
+                      <div class="d-flex flex-column justify-content-center"><span>{{ord.updated_at}}</span><span>Shipped</span></div>
+                      <div class="d-flex flex-column justify-content-center align-items-center"><span></span><span>Out for Delivery</span></div>
+                      <div class="d-flex flex-column align-items-end"><span></span><span>Delivered</span></div>
+                  </div>
+
+                  {% elif ord.order.shipping_status == 'Out for delivery' %} 
+                  <div class="d-flex flex-row justify-content-between align-items-center order">
+                    <div class="d-flex flex-column order-details"><span>Your order is out for Delivery</span><span class="date">by DHFL on {{ord.created_at}}</span></div>
+                    
+                </div>
+                <div class="aside"><img src="{{ord.product.image1.url}}" class="img-sm">
+                  {{ord.product.product_name}} </div>
+                  <hr class="divider mb-4">
+                <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
+                    <hr class="flex-fill track-line"><span class="dot"></span>
+                    <hr class="flex-fill track-line"><span class="dot"></span>
+               
+                    <hr class="flex-fill track-lin"><span class="d-flex justify-content-center align-items-center big-dot dot"></i></span></div>
+                
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                      <div class="d-flex flex-column align-items-start"><span>{{ord.updated_at}}</span><span>Order placed</span></div>
+                      <div class="d-flex flex-column justify-content-center"><span>{{ord.updated_at}}</span><span>Shipped</span></div>
+                      <div class="d-flex flex-column justify-content-center align-items-center"><span>{{ord.updated_at}}</span><span>Out for Delivery</span></div>
+                      <div class="d-flex flex-column align-items-end"><span></span><span>Delivered</span></div>
+                  </div>
+                  {% elif ord.order.shipping_status == 'delivered' %} 
+                  <div class="d-flex flex-row justify-content-between align-items-center order">
+                    <div class="d-flex flex-column order-details"><span>Your order has been delivered</span><span class="date">by DHFL {{ord.created_at}}</span></div>
+                    
+                </div>
+                <div class="aside"><img src="{{ord.product.image1.url}}" class="img-sm">
+                  {{ord.product.product_name}} </div>
+                  <hr class="divider mb-4">
+                <div class="d-flex flex-row justify-content-between align-items-center align-content-center"><span class="dot"></span>
+                    <hr class="flex-fill track-line"><span class="dot"></span>
+                    <hr class="flex-fill track-line"><span class="dot"></span>
+                  
+                    <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span></div>
+                
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                      <div class="d-flex flex-column align-items-start"><span>{{ord.updated_at}}</span><span>Order placed</span></div>
+                      <div class="d-flex flex-column justify-content-center"><span>{{ord.updated_at}}</span><span>Shipped</span></div>
+                      <div class="d-flex flex-column justify-content-center align-items-center"><span>{{ord.updated_at}}</span><span>Out for Delivery</span></div>
+                      <div class="d-flex flex-column align-items-end"><span>{{ord.updated_at}}</span><span>Delivered</span></div>
+                  </div>
+                  {%endif%}
+    
+              
+          </div>
+      </div>
+  </div>
+</div>
+
+{%endfor%}
+
+{% endblock %}

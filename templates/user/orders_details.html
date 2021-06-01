@@ -1,0 +1,136 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block contend %}
+
+
+
+<style>
+  .sidenav {
+    width: 15rem;
+    height: 25rem;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+
+  }
+
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #818181;
+    display: block;
+  }
+
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+
+
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+</style>
+
+
+
+<div class="row">
+  <div class="col-lg-3">
+    <div class="card" style="height: 100% ; width: 18rem;">
+      <div class="card-body">
+
+
+        <!-- <a href="#" class="btn btn-outline-dark my-3">User Profile</a><br>
+          <a href="" class="btn btn-outline-dark my-3">Add Address</a><br>
+          <a href="" class="btn btn-outline-dark my-3">Orders</a>
+           -->
+
+        <div class="sidenav">
+          <a href="{% url 'user_profile' user.id %}">Profile Info</a>
+
+          <hr style="background-color: white;">
+
+          <a href="{% url 'add_address' %}">Add New Address</a>
+          <hr style="background-color: white;">
+          <a href="{%  url 'orders_details' %}" style="color: white;">My Orders</a>
+          <hr style="background-color: white;">
+          <a href="{%  url 'referrals' %}">Refer and Earn</a>
+          <hr style="background-color: white;">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div class="col-lg-9" id="orders">
+    <div class="card">
+      <div class="card-body">
+        <table class="table">
+          
+
+          <tbody>
+            {% for ord in order %}
+            <tr>
+
+              <td>{{ord.product.product_name}} <div class="aside"><img src="{{ord.product.image1.url}}" class="img-sm">
+                </div>
+              </td>
+
+              <td>{{ord.order.status}}</td>
+              {% if ord.order.status == 'cancelled' or ord.order.status == 'cancelled by user' %}
+              <td>
+                <h6 class="">cancelled</h6>
+              </td>
+              {%else%}
+              <td><a href="{%  url 'cancel_order_user' ord.order_id  %}"
+                  class="btn btn-outline-danger btn-sm">cancel</a></td>
+              <td>
+              <td><a href="{%  url 'order_tracking' ord.product_id  %}"
+                  class="btn btn-outline-primary btn-sm">Track</a></td>
+              <td>
+                {% if ord.payment.payment_method == 'RazorPay' or ord.payment.payment_method == 'COD' %}
+                <a href="{% url 'razor_success' ord.order.id %}">Get invoice</a>
+                {% else%}
+                <a href="{% url 'success'%}">Get invoice</a>
+                {% endif %}
+
+              </td>
+            </tr>
+
+            {% endif %}
+
+            {% endfor %}
+
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="section-footer border-top" id="footer" style="max-height: 100px; ">
+  <div class="container">
+    <p class="float-md-right">
+      &copy Copyright 2021 All rights reserved
+    </p>
+    <p>
+      <a href="#">Terms and conditions</a>
+    </p>
+  </div>
+  {% endblock %}

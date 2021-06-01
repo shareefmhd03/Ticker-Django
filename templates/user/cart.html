@@ -1,0 +1,177 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block contend %}
+
+<style>
+	body{
+		background-color: rgb(247, 244, 244);
+	}
+</style>
+<section class="section-content padding-y">
+	<div class="container">
+
+		<!-- ============================ COMPONENT 1 ================================= -->
+		{% if not cart_items%}
+		<h2 class="text-center">Cart is empty</h2>
+		<div class="text-center">
+			<a href="{% url 'home' %}" class="btn btn-dark">Continue Shopping</a>
+		</div>
+		{% else %}
+		<div class="row">
+			<aside class="col-lg-9">
+				<div class="card">
+					<table class="table table-borderless table-shopping-cart">
+						<thead class="text-muted">
+							<tr class="small text-uppercase">
+								<th scope="col">Product</th>
+								<th scope="col" width="120">Quantity</th>
+								<th scope="col" width="120">Price</th>
+								<th scope="col" class="text-right" width="200"> </th>
+							</tr>
+						</thead>
+						<tbody>
+							{%for cart_item in cart_items%}
+							<tr>
+								<td>
+									<figure class="itemside align-items-center">
+										<div class="aside"><img src="{{cart_item.product.image1.url}}" class="img-sm">
+										</div>
+										<figcaption class="info">
+											<a href="{{cart_item.product.get_url}}"
+												class="title text-dark">{{cart_item.product.product_name}}</a>
+											<p class="text-muted small">Brand:{{cart_item.product.brand}}</p>
+											</p>
+										</figcaption>
+									</figure>
+								</td>
+								<td>
+									<!-- col.// -->
+									<div class="col">
+										<div class="input-group input-spinner">
+											<div class="input-group-prepend">
+												<button 
+													class="btn btn-light" onClick="addCart('{{cart_item.product.id}}',-1)"  type="button" id="button-minus"> <i
+														class="fa fa-minus"></i> </button>
+											</div>
+											{% if cart_item.quantity < cart_item.product.stock %} 
+											<span  id="qty-{{cart_item.product.id}}" class="form-control">{{cart_item.quantity}}</span>
+												<div class="input-group-append">
+
+
+													<button
+														class="btn btn-light" onClick="addCart('{{cart_item.product.id}}',1)" type="button" id="button-plus"> <i
+															class="fa fa-plus"></i> </button>
+													{% else %}
+													<span type="text" class="form-control"
+														value="{{cart_item.quantity}}"></span>
+													{% endif %}
+												</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<div class="price-wrap">
+
+										<var id="price-{{cart_item.product.id}}" class="price">{{cart_item.sub_total}}</var>
+										<small class="text-muted"> ₹{{cart_item.product.price}} each </small>
+									</div> <!-- price-wrap .// -->
+								</td>
+								<td class="text-right">
+									<a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger">
+										Remove</a>
+								</td>
+							</tr>
+							{%endfor%}
+
+						</tbody>
+					</table>
+				</div>
+
+			</aside> 
+			<aside class="col-lg-3">
+
+				<div class="card">
+					<div class="card-body">
+						<dl class="dlist-align">
+							<dt>Total price:</dt>
+							<dd id="grand_total" class="text-right">{{grand_total}}</dd>
+						</dl>
+
+
+						<hr>
+						<p class="text-center mb-3">
+							<img src="{% static 'images/misc/payments.png' %}" height="26">
+						</p>
+						<a href="{% url 'checkout' %}" class="btn btn-dark btn-block"> Checkout </a>
+						<a href="{% url 'home' %}" class="btn btn-light btn-block">Continue Shopping</a>
+					</div> 
+				</div>
+
+			</aside>
+
+
+		</div>{% endif %}
+		<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+	</div> 
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+
+<script>
+	function addCart(id, value) {
+		console.log('start')
+        if (value == 1|| value == -1){
+			console.log('in_if')
+            var data = {
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                value: value
+           }
+			console.log('before_ajax')
+            $.ajax({
+                url : '/carts/add_cart/'+ id,
+                type: "POST",
+                data : data,
+                dataType : "json",
+                success: function(body){
+                    $('#qty-'+body.id).html(body.quantity)
+                    $('#price-'+body.id).html(body.total)
+                    $('#grand_total').html('₹'+body.grand_total+'/-')
+                    Total()
+					//on()
+					//alert('success')
+					console.log(body.quantity)
+					console.log(body.total,'total')
+					
+									
+					if(body.quantity == 0){
+						window.location.reload()
+						}
+                }
+            });
+			   
+        }console.log('out_if')
+		
+    }
+	
+	
+
+	function Total(){
+       var grandTotal = 0
+        $('.price').each(function () {
+			console.log(parseInt($(this).html()),'value of price')
+            grandTotal += parseInt($(this).html());
+			console.log(grandTotal,'grand_total')
+        })
+        $('#grand_total').html('₹'+parseInt(grandTotal)+'/-')
+    }
+	$(document).ready(function () {
+       Total()
+   })
+ 
+</script>
+
+{% endblock %}

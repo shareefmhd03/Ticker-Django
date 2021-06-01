@@ -1,0 +1,203 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block contend %}
+
+
+<section class="section-content padding-y bg">
+    <div class="container">
+
+        <!-- ============================ COMPONENT 1 ================================= -->
+
+        <div class="row">
+            <aside class="col-lg-7">
+                <div class="card">
+                    <div class="col-lg-12 ">
+                        <div class="card">
+                            
+
+                            <div class="card-body">
+                                <a href="{% url 'add_address' %}" class="hov">Add New Address</a>
+                                <h5>Select Address</h5>
+                                <hr>
+                                {% if is_saved %}
+                                {% for add in address %}
+                                <input type="radio" value="{{add.id}}" name='address'>
+                                <p>{{add.first_name}} {{add.last_name}}</p>
+                                <p>{{add.phone}}</p>
+                                <p>{{add.address}},{{add.city}},{{add.state}}</p>
+                                
+                                <a href="{% url 'edit_address_in_checkout' add.id %}" class="btn btn-sm btn-dark">Edit</a>
+                                <hr>
+                                {% endfor %}
+                                {% else %}
+                                <h6>No saved Address</h6>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card ml-2 mt-2" style="width: 18rem;">
+                        <h6>Apply Coupons</h6>
+                        <div class="card-body">
+                            <form action="{% url 'coupon_verify' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="text" class="form-control" name="coupon">
+                                <input type="submit" class="btn btn-sm btn-primary mt-2" value="Apply">
+                            </form>
+        
+                        </div>
+                    </div>
+                    <div class="m-2">
+                        <h5>Billing Address</h5>
+                        <form action="{% url 'place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">First name</label>
+                                    <input type="text" class="form-control" name="first_name" id="first_name" required>
+
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">Last name</label>
+                                    <input type="text" class="form-control" name="last_name" id="last_name" required>
+
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email" required>
+                                </div>
+
+                                <div class="col form-group">
+                                    <label for="">Phone number</label>
+                                    <input type="text" class="form-control" name="phone" id="phone" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">Address</label>
+                                    <input type="text" class="form-control" name="address" id="address" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">City</label>
+                                    <input type="text" class="form-control" name="city" id="city" required>
+
+                                </div>
+                                <div class="col form-group">
+                                    <label for="">State</label>
+                                    <input type="text" class="form-control" name="state" id="state" required>
+
+                                </div>
+                            </div>
+
+
+
+                    </div>
+                    
+
+                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                    <script>
+
+                        $(document).ready(function () {
+                            $('input[type="radio"]').click(function () {
+                                var address = $(this).val();
+                                //console.log(address)
+
+                                $.ajax({
+                                    url: "{% url 'get_address' %}",
+                                    type: "GET",
+                                    data: { 'address': address },
+                                    success: function (data) {
+                                        console.log(data)
+                                        $("#first_name").val(data.first_name);
+                                        $("#last_name").val(data.last_name);
+                                        $("#email").val(data.email);
+                                        $("#phone").val(data.phone);
+                                        $("#address").val(data.address);
+                                        $("#city").val(data.city);
+                                        $("#state").val(data.state);
+                                    }
+                                })
+                            })
+                        })
+                    </script>
+
+                </div> <!-- card.// -->
+
+            </aside> <!-- col.// -->
+            <aside class="col-lg-5">
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Product</th>
+                                    <th scope="col" width="120">Quantity</th>
+                                    <th scope="col" width="120">Price</th>
+                                    <th scope="col" class="text-right" width="200"> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                {%for cart_item in cart_items%}
+                                <tr>
+                                    <td>
+                                        <figure class="itemside align-items-center">
+                                            <div class="aside"><img src="{{cart_item.product.image1.url}}"
+                                                    class="img-sm"></div>
+                                            <figcaption class="info">
+                                                <a href="{{cart_item.product.get_url}}"
+                                                    class="title text-dark">{{cart_item.product.product_name}}</a>
+                                                    <p class="text-muted small">Brand:{{cart_item.product.brand}}</p>
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td>
+                                        <label for="">{{cart_item.quantity}}</label>
+                                    </td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">₹{{cart_item.sub_total}}</var>
+
+                                        </div> <!-- price-wrap .// -->
+                                    </td>
+
+                                </tr>
+                                {%endfor%}
+
+                            </tbody>
+                        </table>
+
+
+                        <button type="submit" class="btn btn-dark btn-block">Confirm Order</button>
+                        <a href="{% url 'home' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                    </div> <!-- card-body.// -->
+                </div> <!-- card.// -->
+                </form>
+              
+    
+            </aside> <!-- col.// -->
+            
+
+
+        </div> <!-- row.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+
+    </div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+<footer class="section-footer border-top" id="footer" style="max-height: 100px; ">
+	<div class="container">
+		<p class="float-md-right"> 
+			&copy Copyright 2021 All rights reserved
+		</p>
+		<p>
+			<a href="#">Terms and conditions</a>
+		</p>
+	</div>
+{% endblock %}

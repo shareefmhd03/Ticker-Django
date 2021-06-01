@@ -1,0 +1,116 @@
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+{% block contend %}
+
+
+<h3 class="text-center" style="color: rgb(70, 159, 241);">User Managment</h3>
+<div class="table-responsive">
+
+  <input type="text" id="searchbox" style="width: 20rem; border-radius: 3px;" placeholder="search email..."
+    class="my-2 ml-2" onkeyup="searchrecords()">
+  <table class="table align-items-center table-flush" id="table1">
+    <thead class="thead-dark">
+      <tr>
+        <th style="color: white;" scope="col" class="sort" data-sort="name">Firstname</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="budget">Lastname</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="status">Email</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="status">Status</th>
+        <th style="color: white;" scope="col">Phone</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="completion">Actions</th>
+        <th style="color: white;" scope="col"></th>
+      </tr>
+    </thead>
+    <tbody class="list">
+      {% for user in user %}
+      <tr>
+        <th scope="row">
+          <div class="media align-items-center">
+            <div class="media-body">
+              <span class="name mb-0 text-sm">{{user.first_name}}</span>
+            </div>
+          </div>
+        </th>
+        <td class="media-body">
+          <span class="name mb-0 text-sm">{{user.last_name}}</span>
+        </td>
+        <td>
+          <span class="badge badge-dot mr-4">
+            <span class="status">{{user.email}}</span>
+          </span>
+        </td>
+        <td>
+          <span class="badge badge-dot mr-4">
+            {% if user.is_active == False %}
+            <span style="color: red;">Blocked</span>
+            {% else %}
+            <span style="color: rgb(51, 182, 25);">Active</span>
+            {% endif %}
+          </span>
+        </td>
+        <td>
+          <div class="media-body">
+            <span class="status">{{user.phone}}</span>
+
+          </div>
+        </td>
+        <td>
+          <div class="">
+
+            <a href="{% url  'del_user' user.id %}"
+              onclick="return confirm('Are you sure you want to Remove {{user.first_name}}?');"><i
+                class="material-icons" data-toggle="tooltip" id="del"
+                style="color:red; margin-right: 3rem;">&#xE872;</i> </a>
+
+            <a href="{% url  'block_user' user.id %}"
+              onclick="return confirm('Are you sure you want to block {{user.first_name}}?');"><i class="material-icons"
+                data-toggle="tooltip" id="blo" style="color:black;">&#xe14b;</i></a>
+
+          </div>
+          <label for="del">Delete</label>
+
+
+          {% if user.is_active == False %}
+          <label for="blo" style="margin-left: 2rem;">Unblock</label>
+          {%else%}
+          <label for="blo" style="margin-left: 2rem;">Block</label>
+          {%endif%}
+
+        </td>
+
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+</div>
+
+
+
+<script type="text/javascript">
+
+  function searchrecords() {
+    var input, table, tr, td, filter, i, txtdata;
+    input = document.getElementById('searchbox');
+    filter = input.value.toUpperCase();
+    table = document.getElementById('table1');
+    tr = document.getElementsByTagName('tr');
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        txtdata = td.innerText;
+        if (txtdata.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        }
+        else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+
+
+
+
+{% endblock %}

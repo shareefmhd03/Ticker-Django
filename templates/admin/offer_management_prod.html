@@ -1,0 +1,105 @@
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+
+{% block contend %}
+
+
+<h3 class="text-center" style="color: rgb(70, 159, 241);"> Product - Offer Managment</h3>
+<div class="table-responsive">
+
+
+  <input type="text" id="searchbox" style="width: 20rem;" placeholder="search Product name..." class="my-2"
+    onkeyup="searchrecords()">
+
+
+  <table class="table align-items-center table-flush" id=table1>
+    <thead class="thead-dark">
+      <tr>
+        <th style="color: white;" scope="col" class="sort" data-sort="name">Product Name</th>
+        <!-- <th style="color: white;" scope="col" class="sort" data-sort="budget">Valid From</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="status">Valid Upto</th>
+        <th style="color: white;" scope="col">Offer Type</th>
+        <th style="color: white;" scope="col" class="sort" data-sort="completion">Actions</th>
+        <th style="color: white;" scope="col"></th> -->
+      </tr>
+    </thead>
+   
+    <tbody class="list">
+      {% for prod in products %}
+      <tr>
+        <td scope="row">
+          <div class="media align-items-center">
+
+            <div class="media-body">
+              <a href="{% url 'add_product_offer' prod.id %}"><span class="name mb-0 text-sm">{{prod.product_name}}</span></a>
+            </div>
+          </div>
+        </td>
+       
+        
+        <!-- <td class="media-body">
+          <span class="name mb-0 text-sm"></span>
+        </td>
+        <td>
+          <span class="badge badge-dot mr-4">
+
+            <span class="status"></span>
+          </span>
+        </td>
+        <td>
+          <div class="media-body">
+            <span class="status"> </span>
+
+          </div>
+        </td>
+        <td>
+          <div class="">
+           
+            <a href=""
+              onclick="return confirm('Are you sure you want to Remove?');">Remove</a>
+            <a href="" class="edit"><i class="material-icons ml-5"
+                title="Edit">&#xE254;</i></a>
+
+
+          </div>
+        </td> -->
+ 
+
+      </tr>
+      {% endfor %}
+    </tbody>
+    
+  </table>
+</div>
+</div>
+
+<div class="mr-5 mt-4  float-right">
+
+</div>
+
+
+<script type="text/javascript">
+
+  function searchrecords() {
+    var input, table, tr, td, filter, i, txtdata;
+    input = document.getElementById('searchbox');
+    filter = input.value.toUpperCase();
+    table = document.getElementById('table1');
+    tr = document.getElementsByTagName('tr');
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtdata = td.innerText;
+        if (txtdata.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        }
+        else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+
+{% extends 'admin/admin_base.html' %}
+{% load static%}
+{% block contend %}
+
+<h3 class="text-center" style="color: rgb(70, 159, 241);">Order Products</h3>
+<div class="table-responsive">
+    <table class="table align-items-center table-flush">
+     
+      <thead class="thead-dark">
+        <tr>
+          <th style="color: white;" scope="col" class="sort" data-sort="name">Product ID</th>
+          <th scope="col" class="sort" style="color: white;" data-sort="budget">Product Name</th>
+          <th scope="col" class="sort" data-sort="status" style="color: white;">Created Date</th>
+      
+          <th scope="col" class="sort" data-sort="completion" style="color: white;">Payment Status</th>
+          <th scope="col" class="sort" data-sort="completion" style="color: white;">Quantity</th>
+          <!-- <th scope="col" style="color: white;">status</th> -->
+          
+        </tr>
+      </thead>
+      <tbody class="list">
+        {% for ord in order %}
+        <tr>
+          <th scope="row">
+            <div class="media align-items-center">
+              
+            <div class="media-body">
+            <span class="name mb-0 text-sm">{{ord.product.id}}</span>
+            </div>
+            </div>
+          </th>
+          <td class="media-body">
+            <span class="name mb-0 text-sm">{{ord.product.product_name}}</span>
+          </td>
+          <td>
+            <span class="badge badge-dot mr-4">
+              
+              <span class="status">{{ord.created_at}}</span>
+            </span>
+          </td>
+     
+          <td>
+            <div class="media-body">
+              <span class="status">{{ord.payment.status}}</span>
+              
+            </div>
+          </td>
+          
+          <td>
+            <div class="media-body">
+              <span class="status">{{ord.quantity}}</span>
+              
+            </div>
+          </td>
+          
+         
+          
+        </tr>
+      </tbody>
+      {% endfor %}
+   
+    </table>
+  </div>
+
+{% endblock %}

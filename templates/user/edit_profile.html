@@ -1,0 +1,77 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block contend %}
+
+
+
+<style>
+  .sidenav {
+    width: 15rem;
+    height: 25rem;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+
+  }
+
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #818181;
+    display: block;
+  }
+
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+
+
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+</style>
+
+
+
+<div class="row">
+  <div class="col-lg-3">
+    <div class="card" style="height: 100% ; width: 18rem;">
+      <div class="card-body">
+
+
+        <div class="sidenav">
+          <a href="{% url 'user_profile' user.id %}" style="color: white;">Profile Info</a>
+          <a style="color: blanchedalmond; font-size: small; margin-left: 10px;" onclick="add(1)">Saved Address</a>
+          <hr>
+
+
+          <a href="{% url 'add_address' %}">Add New Address</a>
+          <a href="{%  url 'orders_details' %}">My Orders</a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <form action="" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" class="btn btn-dark mt-2" value="submit" name="" id="">
+  </form>
+
+
+  
+
+
+  {% endblock %}

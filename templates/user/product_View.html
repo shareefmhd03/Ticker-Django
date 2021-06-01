@@ -1,0 +1,400 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="max-age=604800" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>Ticker</title>
+
+	<link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+
+	<!-- jQuery -->
+	<script src="{% static 'js/jquery-2.0.0.min.js' %}" type="text/javascript"></script>
+
+	<!-- Bootstrap4 files-->
+	<script src="{% static 'js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+	<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
+
+	
+
+	<link href="{% static 'css/ui.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'css/responsive.css' %}" rel="stylesheet" media="only screen and (max-width: 1200px)" />
+
+	<!-- custom javascript -->
+	<script src="{% static 'js/script.js' %}" type="text/javascript"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+	.rate > input{
+		display: none;
+	}
+
+	.rate{
+		display: inline-block;
+		border: 0;
+	}
+	.rate > label{
+		float: right;
+	}
+
+	.rate > label::before{
+		display: inline-block;
+		font-size: 1.1rem;
+		font-family: FontAwesome;
+		content: "\f005";
+		margin: 0;
+		padding: 0.3rem, .2rem;
+		cursor: pointer;
+	}
+	.rate .half::before{
+		content: "\f089";
+		position: absolute;
+		padding-right: 0;
+	}
+
+	input:checked ~ label, label:hover ~ label{
+		color: #ffb503;
+	}
+
+	input:checked + label:hover,input:checked ~ label:hover, input:checked ~ label:hover~ label,
+	label:hover ~ input:checked ~ label{
+		color: #cc9000;
+	}
+	.ratingstar i{
+		color: #ffb503;
+	}
+ </style>
+
+</head>
+
+<body>
+	<header class="section-header">
+		<section class="header-main border-bottom">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-lg-2 col-md-3 col-6">
+						<a href="{% url 'home' %}" class="brand-wrap">
+							<img class="logo" src=" {% static 'images/logo.png' %}">
+						</a>
+					</div>
+
+
+
+
+
+					<div class="col-lg  col-md-6 col-sm-12 col">
+						<form action="{% url 'search' %}" class="search" method="GET">
+							<div class="input-group w-100">
+								<input type="text" class="form-control" style="width:60%;" placeholder="Search"
+									name='keyword'>
+
+								<div class="input-group-append">
+									<button class="btn btn-dark" type="submit">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</form> <!-- search-wrap .end// -->
+					</div>
+
+
+
+
+					{% if user.is_authenticated%}
+					<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+						<div class="d-flex justify-content-end mb-3 mb-lg-0">
+							<div>
+
+								<small class="title text-muted">Welcome {{user.first_name}}!</small>
+								<a href="{% url 'user_profile' user.id %}">
+									<h6 class="title text-muted">Account</h6> <span class="dark-transp"></span>
+								</a>
+								<a href="{% url 'user_logout' %}" class="btn btn-dark text-white btn-sm">logout</a>
+							</div>
+							<!-- <a href="./cart.html" class="widget-header pl-3 ml-3"> -->
+							<div class="">
+
+								<a href="{% url 'cart' %}" class="icon icon-sm rounded-circle border ml-5 "><i
+										class="fa fa-shopping-cart text-dark"></i>
+
+
+									<span class="badge badge-pill badge-danger notify">{{cart_count}} </span>
+								</a>
+							</div> <!-- widgets-wrap.// -->
+						</div> <!-- col.// -->
+						{%else%}
+						<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+							<div class="d-flex justify-content-end mb-3 mb-lg-0">
+								<div class="widget-header">
+									<small class="title text-muted">Welcome guest!</small>
+									<div>
+										<a href="{% url 'user_login' %}">Sign in</a> <span class="dark-transp"> |
+										</span>
+										<a href="{% url 'user_register' %}"> Register</a>
+									</div>
+								</div>
+								<a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
+									<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i>
+									</div>
+									<span class="badge badge-pill badge-danger notify">{{cart_count}} </span>
+								</a>
+							</div> <!-- widgets-wrap.// -->
+						</div> <!-- col.// -->
+
+						{% endif %}
+
+
+					</div> <!-- row.// -->
+				</div> <!-- container.// -->
+		</section> <!-- header-main .// -->
+
+
+
+
+	</header> <!-- section-header.// -->
+
+
+
+
+	<section class="section-content padding-y">
+		<div class="container">
+			<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+			<div class="card">
+				<div class="row no-gutters">
+					<aside class="col-lg-6">
+						<div class="show" style="z-index:9;" href="{{prod.image1.url}}">
+							<img src="{{prod.image1.url}}" id="show-img" style="margin: 10px;
+										border: 1px solid black;">
+						</div>
+
+
+						<div class="small-img">
+							<div class="small-container">
+								<div id="small-img-roll">
+									<img src="{{prod.image1.url}}" class="show-small-img" alt="">
+									<img src="{{prod.image2.url}}" class="show-small-img" alt="">
+									<img src="{{prod.image3.url}}" class="show-small-img" alt="">
+									<img src="{{prod.image4.url}}" class="show-small-img" alt="">
+								</div>
+							</div>
+						</div>
+
+						<script src="{% static 'js/zoom-image.js'%}"></script>
+						<script src="{% static 'js/main.js' %}"></script>
+
+					</aside>
+
+					<main class="col-lg-6 border-left">
+
+
+						<article class="content-body">
+
+							<h2 class="title">{{prod.product_name}}</h2>
+							<div class="ratingstar">
+								<span>
+									<i class="fa fa-star{% if prod.average_review < 0.5 %}-o{%elif prod.average_review  >= 0.5 and prod.average_review < 1 %}-half-o {%endif%}" aria-hidden="true"></i>
+									<i class="fa fa-star{% if prod.average_review < 1.5 %}-o{%elif prod.average_review  >= 1.5 and prod.average_review < 2 %}-half-o {%endif%}" aria-hidden="true"></i>
+									<i class="fa fa-star{% if prod.average_review < 2.5 %}-o{%elif prod.average_review  >= 2.5 and prod.average_review < 3 %}-half-o {%endif%}" aria-hidden="true"></i>
+									<i class="fa fa-star{% if prod.average_review < 3.5 %}-o{%elif prod.average_review  >= 3.5 and prod.average_review < 4 %}-half-o {%endif%}" aria-hidden="true"></i>
+									<i class="fa fa-star{% if prod.average_review < 4.5 %}-o{%elif prod.average_review  >= 4.5 and prod.average_review < 5 %}-half-o {%endif%}" aria-hidden="true"></i>
+									({{ prod.count_review }} reviews)
+								</span>
+							</div>
+							{% if prod.average_review == 0  %}
+							No ratings yet
+							{% else %}
+							Rating: {{prod.average_review}}
+							{% endif %}
+							{% if product_offer_exists or category_offer_exists %}
+							<label for="">Offer Price!!</label>
+							<div class="mb-3">
+								<var class="price h4">₹{{prod.offer_price}}</var>
+							</div>
+							<div class="mb-3">
+								<del><var class="price h6 text-danger">₹{{prod.price}}</var> </del>
+							</div>
+
+							{% else %}
+							<div class="mb-3">
+								<var class="price h4">₹{{prod.price}}</var>
+							</div>
+
+							{% endif %}
+
+							<p>{{prod.description}}</p>
+
+							<hr>
+							<h6>SPECIFICATIONS</h6>
+							<hr>
+							<div class="row ml-1">
+								<label for="">Brand:</label>
+								<var class="price h6">{{prod.brand}}</var>
+							</div>
+							<div class="row ml-1">
+								<label for="">Model:</label>
+								<var class="price h6">{{prod.model_name}}</var>
+							</div>
+
+							<div class="row ml-1">
+								<label for="">Gender:</label>
+								<var class="price h6">{{prod.gender}}</var>
+							</div>
+							<div class="row ml-1">
+								<label for="">Water Resistance:</label>
+								<var class="price h6">{{prod.water_resistance}}</var>
+							</div>
+							<div class="row ml-1">
+								<label for="">Strap Type:</label>
+								<var class="price h6">{{prod.strap_type}}</var>
+							</div>
+							<div class="row ml-1">
+								<label for="">Strap color:</label>
+								<var class="price h6">{{prod.strap_colour}}</var>
+							</div>
+							<div class="row ml-1">
+								<label for="">Glass:</label>
+								<var class="price h6">{{prod.glass}}</var>
+							</div>
+
+							{% if prod.stock <= 0%} <h4 style="color:red;">out of stock</h4>
+								{%else%}
+								{% if in_cart %}
+								<a href="" class="btn  btn-success">Added to cart </a>
+								<a href="{% url 'cart' %}" class="btn btn-dark"> Go to cart</a>
+								{% else %}
+								<a href="{% url 'add_to_cart' prod.id %}" class="btn btn-block btn-dark">Add to cart
+								</a>
+
+								{% endif %}
+								{%endif %}
+						</article>
+
+					</main>
+				</div>
+
+			</div> <!-- card.// -->
+
+
+		</div>
+	</section>
+
+
+	
+
+
+		
+<br>
+
+<div class="row ml-5">
+			<div class="col-md-9">
+
+	<header class="section-heading">
+		<h3>Customer Reviews </h3>  
+		<span>Average Rating</span><span>({{ prod.count_review }} reviews)</span>
+		<div class="ratingstar">
+			<span>
+				<i class="fa fa-star{% if prod.average_review < 0.5 %}-o{%elif prod.average_review  >= 0.5 and prod.average_review < 1 %}-half-o {%endif%}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if prod.average_review < 1.5 %}-o{%elif prod.average_review  >= 1.5 and prod.average_review < 2 %}-half-o {%endif%}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if prod.average_review < 2.5 %}-o{%elif prod.average_review  >= 2.5 and prod.average_review < 3 %}-half-o {%endif%}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if prod.average_review < 3.5 %}-o{%elif prod.average_review  >= 3.5 and prod.average_review < 4 %}-half-o {%endif%}" aria-hidden="true"></i>
+				<i class="fa fa-star{% if prod.average_review < 4.5 %}-o{%elif prod.average_review  >= 4.5 and prod.average_review < 5 %}-half-o {%endif%}" aria-hidden="true"></i>
+
+			</span>
+		</div>
+		
+	</header>
+	<form action="{% url 'submit_review' prod.id %}" method ="POST">
+		{% csrf_token %}
+		<h5>Write your Reviews</h5>
+		<div>
+			<label for="">Rate the Product</label><br>
+			<div class="rate">
+				<input type="radio" name="rating" id="rating10" value="5" required><label for="rating10" title="5"></label>
+				<input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9" title="4.5" class="half"></label>
+				<input type="radio" name="rating" id="rating8" value="4" required><label for="rating8" title="4"></label>
+				<input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7" title="3.5" class="half"></label>
+				<input type="radio" name="rating" id="rating6" value="3" required><label for="rating6" title="3"></label>
+				<input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5" title="2.5" class="half"></label>
+				<input type="radio" name="rating" id="rating4" value="2" required><label for="rating4" title="2"></label>
+				<input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3" title="1.5" class="half"></label>
+				<input type="radio" name="rating" id="rating2" value="1" required><label for="rating2" title="1"></label>
+				<input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1" title="0.5" class="half"></label>
+			</div><br>
+			Review title:
+			<input type="text"  class="form-control" name="subject"><br>
+			<textarea name="review" class="form-control" id="" rows="5"></textarea><br>
+			{% if user.is_authenticated %}
+				{% if order_product %}
+			<input type="submit" value="submit" name="" id="" class="btn btn-dark btn-sm">
+			{%else%}
+			<p>You must purchase the product to write a review!</p>
+			{%endif%}
+			{%else%}
+			<p>You must login to submit a review! <span><a href="{% url 'user_login' %}">Login Now</a></span></p>
+			{%endif%}
+		</div>
+
+	</form>
+	<br>
+	{% for review in reviews %}
+	<article class="box mb-3">
+		<div class="icontext w-100">
+			<img src="./images/avatars/avatar1.jpg" class="img-xs icon rounded-circle">
+			<div class="text">
+				<span class="date text-muted float-md-right">{{review.updated_at}}</span>  
+				<h6 class="mb-1">{{review.user.first_name}}{{review.user.last_name}} </h6>
+				<div class="ratingstar">
+					<span>
+						<i class="fa fa-star{% if review.rating == 0.5 %}-half-o{%elif review.rating < 1 %}-o {%endif%}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if review.rating == 1.5 %}-half-o{%elif review.rating < 2 %}-o {%endif%}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if review.rating == 2.5 %}-half-o{%elif review.rating < 3 %}-o {%endif%}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if review.rating == 3.5 %}-half-o{%elif review.rating < 4 %}-o {%endif%}" aria-hidden="true"></i>
+						<i class="fa fa-star{% if review.rating == 4.5 %}-half-o{%elif review.rating < 5 %}-o {%endif%}" aria-hidden="true"></i>
+					</span>
+				</div>
+				
+			</div>
+		</div> <!-- icontext.// -->
+		<div class="mt-3">
+			<h6>{{review.subject}}</h6>
+			<p>
+				{{review.review}}
+			</p>	
+		</div>
+	</article>
+	{%endfor%}
+
+	
+
+	</div> <!-- col.// -->
+</div> <!-- row.// -->
+
+
+
+
+
+
+
+
+
+
+<footer class="section-footer border-top" id="footer" style="max-height: 100px; ">
+	<div class="container">
+		<p class="float-md-right">
+			&copy Copyright 2021 All rights reserved
+		</p>
+		<p>
+			<a href="#">Terms and conditions</a>
+		</p>
+	</div>
+
+</body>
+
+
+
+</html>
