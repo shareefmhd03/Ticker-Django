@@ -6,12 +6,14 @@ from . import views
 urlpatterns = [
     
     path('', views.store, name= 'store'),     
-       
+    path('del_coupon/<int:id>/', views.del_coupon, name ='del_coupon'),
     path('order_mgmt/',views.order_management, name = 'order_management'),
     path('shipping_status/<int:id>',views.shipping_status, name = 'shipping_status'),
     path('order_tracking/<int:product_id>', views.order_tracking, name = 'order_tracking'),
     path('submit_review/<int:product_id>/', views.submit_review, name= 'submit_review'),
-
+    path('coupon_management',views.coupon_management, name='coupon_management'),
+    path('create_coupon', views.create_coupon, name ='create_coupon'),
+    
     path('view_orders/<int:id>',views.view_orders, name = 'view_orders'),
     path('edit_order/<int:id>',views.edit_order, name = 'edit_order'),
     path('search/',views.search, name = 'search'),

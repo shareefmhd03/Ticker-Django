@@ -42,9 +42,12 @@
                         <div class="card-body">
                             <form action="{% url 'coupon_verify' %}" method="POST">
                                 {% csrf_token %}
-                                <input type="text" class="form-control" name="coupon">
+                                <input type="text" class="form-control" id="coupon_code" name="coupon">
                                 <input type="submit" class="btn btn-sm btn-primary mt-2" value="Apply">
                             </form>
+                            {% for message in messages %}
+                            {{message}}
+                            {% endfor %}
         
                         </div>
                     </div>
@@ -200,4 +203,45 @@
 			<a href="#">Terms and conditions</a>
 		</p>
 	</div>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+            $('#coupon_code').change(function () {
+              var code = $(this).val();
+              console.log(code)
+         
+              $.ajax({
+                url: '/carts/validate_coupon/',
+                
+                data: {
+                  'code': code
+                },
+                dataType: 'json',
+            
+                success: function (data) {
+                    console.log(data.valid)
+                    console.log(data.val)
+                  if (!(data.valid)) {
+                    if (!(data.val)){
+                        $('#coupon_code').val('');
+                          
+                        alert('invalid coupon code');
+                        
+                    }}
+                    
+
+                  
+                  
+                  
+
+                  else if (data ==null)
+                  return
+                }
+              });
+         
+            });
+        });
+    </script>
 {% endblock %}

@@ -102,3 +102,17 @@ class ReviewRating(models.Model):
 
     def __str__(self):
         return self.subject
+
+
+
+class Coupons(models.Model):
+    coupon_name = models.CharField(max_length=6, unique =True)
+    off_price = models.IntegerField()
+    valid_from = models.DateField()
+    valid_upto  = models.DateField()
+    valid = models.BooleanField(default= True)
+
+    def __str__(self):
+        return self.coupon_name
+
+    

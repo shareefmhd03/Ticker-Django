@@ -4,7 +4,7 @@ import json
 from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render,redirect, get_object_or_404
-from store.models import CouponCode, Product,Category,CategoryOffer, ProductOffer
+from store.models import CouponCode, Coupons, Product,Category,CategoryOffer, ProductOffer
 
 from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
@@ -156,7 +156,7 @@ def cart(request, total = 0, quantity=0, cart_items =None):
     
 
 
-def coupon_verify(request, total=0, new_price = 0):
+def coupon_confirm(request, total=0, new_price = 0):
         today= date.today()
         NextDay_Date = datetime.date.today() + datetime.timedelta(days=2)
         if request.method == 'POST':
@@ -166,16 +166,16 @@ def coupon_verify(request, total=0, new_price = 0):
                 valid = CouponCode.objects.get(user = request.user, coupon_name = coupon, 
                                                  valid_from__lte = today, valid_upto__gte = NextDay_Date)
                 # valid.delete()
-                print(valid.valid)
-                if valid.valid == True:
-                    coupon_price(request, valid.off_price)
-                # print(total,'totals here')
-                    valid.valid = False
-                    print(valid.valid)
-                    valid.save()
-                else:
-                    # messages.info(request, 'invalid coupon code')
-                    pass
+                for val in valid:
+                    if val.valid == True:
+                        coupon_price(request, valid.off_price)
+                    # print(total,'totals here')
+                        val.valid = False
+                        print(val.valid)
+                        val.save()
+                    else:
+                        # messages.info(request, 'invalid coupon code')
+                        pass
                 
                 # request.session['coupon_id'] == coupon.id
                 
@@ -188,7 +188,7 @@ def coupon_verify(request, total=0, new_price = 0):
                     print('in except')
                     pass
         return redirect('checkout')
-def coupon_price(request, offer_price):
+def coupon_price(request, off_price):
     new_price = 0
     cart_items = CartItem.objects.filter(user =request.user, is_active=True)
     cart = CartItem.objects.filter(user = request.user, is_active = True)
@@ -199,7 +199,8 @@ def coupon_price(request, offer_price):
         if cart_item.product.offer_price:
             new_price += cart_item.product.offer_price * cart_item.quantity
             
-            reduce = new_price * (offer_price/100)
+            reduce = new_price * (off_price/100)
+            print(reduce)
             total  = new_price - reduce
             cart_item.product.coupon_price = total
             print(cart_item.product.coupon_price,'if_---')
@@ -213,8 +214,9 @@ def coupon_price(request, offer_price):
         else:
             print('i _else')
             new_price +=(cart_item.product.price * cart_item.quantity)
+            print(new_price)
             
-            reduce = new_price * (offer_price/100)
+            reduce = new_price * (off_price/100)
             total  = new_price - reduce
             cart_item.product.coupon_price = total
             print(cart_item.product.coupon_price,'if')
@@ -355,3 +357,63 @@ def add_cart(request, id):
         except CartItem.DoesNotExist:
             return redirect('cart') 
   
+
+def coupon_verify(request, total=0, new_price = 0):
+        if request.method == 'POST':
+            coupon = request.POST['coupon']
+            print('start')
+            try:
+                valid = Coupons.objects.filter(coupon_name = coupon)
+                                                 
+            
+                for val in valid:
+                    print(val.valid)
+                    if val.valid == True:
+                        coupon_price(request, val.off_price)
+                    # print(total,'totals here')
+                        val.valid = False
+                        print(val.valid)
+                        val.save()
+                    
+                        
+            except CouponCode.DoesNotExist:
+                    
+                    print('in_except')
+                   
+
+            
+            try:
+                valid = CouponCode.objects.filter(user = request.user, coupon_name = coupon)
+                print('hai')                      
+                
+                for val in valid:
+                    if val.valid == True:
+                        coupon_price(request, val.off_price)
+                    # print(total,'totals here')
+                        val.valid = False
+                        print(val.valid)
+                        val.save()
+                        messages.success(request, 'Coupon Applied')
+                    else:
+                        messages.info(request, 'invalid coupon ')
+            
+            except CouponCode.DoesNotExist:
+                
+                print('in except')
+    
+
+        return redirect('checkout')
+
+
+def validate_coupon(request):
+    
+    code = str(request.GET.get('code'))
+    print(code)
+    print('in validate coupon')
+    data = {
+        'valid': Coupons.objects.filter(coupon_name= code, valid= True).exists(),
+        'val': CouponCode.objects.filter(user = request.user, coupon_name= code, valid= True).exists(),
+    }    
+    print(data['valid'])
+    
+    return JsonResponse(data)

@@ -95,7 +95,7 @@ class Address(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(Account, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to="profile_images", blank=True, null =True, default = '/profile_images/default.jpeg')
+    profile_image = models.ImageField(upload_to="profile_images", default = "default.jpeg")
     code = models.CharField(max_length=12, blank = True)
     recommended_by = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True, related_name='ref_by')
     updated = models.DateTimeField(auto_now=True)

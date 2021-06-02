@@ -2,7 +2,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.http.response import HttpResponse
 from orders.models import Order, OrederProduct
 from django.shortcuts import render,get_object_or_404,redirect
-from . models import Product, ProductOffer,CategoryOffer, ReviewRating
+from . models import Coupons, Product, ProductOffer,CategoryOffer, ReviewRating
 from category.models import Category
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
@@ -46,41 +46,49 @@ def store(request, category_slug=None):
 
 def product_view(request,category_slug,product_slug):
     try:
-        product_off = ProductOffer.objects.filter(expired = True)
-        today = date.today()
-        print(today)
-        today1 = today.strftime("%Y-%m-%d")
-        for offer in product_off:
-            if str(offer.valid_upto)<today1:
-                pro  = Product.objects.get(id= offer.product.id)
-                pro.offer_price = None
-                pro.save(update_fields  =['offer_price'])
-            else:
-                if str(offer.valid_from)>today1:
+        product_exist = ProductOffer.objects.filter(product__slug = product_slug, expired = True).exists()
+        
+        if product_exist:
+            product_off = ProductOffer.objects.filter(product__slug = product_slug, expired = True).exists()
+            today = date.today()
+            today1 = today.strftime("%Y-%m-%d")
+
+            for offer in product_off:
+                
+                if str(offer.valid_upto)>today1:
                     pro  = Product.objects.get(id= offer.product.id)
                     pro.offer_price = None
-                    pro.save(update_fields  =['offer_price'])
-    except ProductOffer.DoesNotExist:
-        pass
-    try:
-        category_off = CategoryOffer.objects.filter(expired = True)
-        # cat = Category.objects.get
-        today = date.today()
-        print(today)
-        today1 = today.strftime("%Y-%m-%d")
-        for offer in category_off:
-            if str(offer.valid_upto)<today1:
-                # val = Product..objects.get(categoy_id = offer.category_id)
-                pro  = Product.objects.filter(category_id = offer.category.id)
-                for pro in pro:
-                    pro.offer_price = None
-                    pro.save(update_fields  =['offer_price'])
-            else:
-                if str(offer.valid_from)>today1:
-                    pro  = Product.objects.get(category_id= offer.category.id)
-                    pro.offer_price = None
-                    pro.save(update_fields  =['offer_price'])
-    except CategoryOffer.DoesNotExist:
+                    pro.expired = False
+                    pro.save()
+
+                else:
+                    if str(offer.valid_from)>today1:
+                        pro  = Product.objects.get(id= offer.product.id)
+                        pro.offer_price = None
+                        pro.expired =False
+                        pro.save()
+        elif CategoryOffer.objects.filter(expired = True).exists():
+            category_off=CategoryOffer.objects.filter(expired = True)
+            today = date.today()
+            print(today)
+            today1 = today.strftime("%Y-%m-%d")
+            for offer in category_off:
+
+                if str(offer.valid_upto)>today1:
+                    # val = Product..objects.get(categoy_id = offer.category_id)
+                    pro  = Product.objects.filter(category_id = offer.category.id)
+                    for pro in pro:
+                        pro.offer_price = None
+                        pro.expired = False
+                        pro.save()
+                else:
+                    if str(offer.valid_from)>today1:
+                        pro  = Product.objects.get(category_id= offer.category.id)
+                        pro.offer_price = None
+                        pro.expired =False
+                        pro.save()
+
+    except ProductOffer.DoesNotExist or CategoryOffer.DoesNotExist:
         pass
 
 
@@ -435,8 +443,6 @@ def offer_management_prod(request):
 
 def offer_management_view_products(request):
     products = Product.objects.all()
-    # prod = ProductOffer.objects.all()
-    # categ = CategoryOffer.objects.all()
 
     context = {
             # 'prod':prod,
@@ -579,23 +585,43 @@ def submit_review(request, product_id):
 
 def order_tracking(request, product_id):
     order  = OrederProduct.objects.filter(user = request.user, product_id = product_id)
-    for ord in order:
-        if ord.order.shipping_status == 'None':
-            value = 0
-        elif ord.order.shipping_status == 'Order placed':
-            value = 10
-        elif ord.order.shipping_status == 'Shipped':
-            value= 50
-        elif ord.order.shipping_status == 'Out for delivery':
-            value = 90
-        elif ord.order.shipping_status == 'delivered':
-            value = 100
-        elif ord.order.shipping_status == 'cancelled':
-            value = None
-
+    
     context ={
     
         'order':order,
-        'value':value
+        
     }
     return render(request, 'user/order_tracking.html', context)
+
+
+
+
+def coupon_management(request):
+
+
+    coupon = Coupons.objects.all()
+
+    context={
+        'coupons':coupon,
+    }
+
+    return render(request, 'admin/coupon_management.html', context)
+
+
+def del_coupon(request, id):
+    coup = Coupons.objects.get(id = id)
+    coup.delete()
+    return redirect('coupon_management')
+
+def create_coupon(request):
+    if request.method == 'POST':
+        name = request.POST['coupon_name']
+        off = request.POST['off_percentage']
+        from_ = request.POST['valid_from']
+        upto = request.POST['valid_upto']
+
+        coup = Coupons(coupon_name= name,off_price = off,valid_from = from_, valid_upto = upto)
+        coup.save()
+        return redirect('coupon_management')
+
+    return render(request, 'admin/add_coupon.html')
