@@ -69,6 +69,69 @@
 	}
  </style>
 
+ <style>
+	*{
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	  
+	  }
+	  
+	  .show {
+		width: 380px;
+		height: 400px;
+	  }
+	  
+	  .small-img {
+		width: 350px;
+		height: 70px;
+		margin-top: 30px;
+		position: relative;
+		left: 25px;
+	  }
+	  
+	  .small-img .icon-left, .small-img .icon-right {
+		width: 12px;
+		height: 24px;
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		margin: auto 0;
+	  }
+	  
+	  .small-img .icon-left { transform: rotate(180deg) }
+	  
+	  .small-img .icon-right { right: 0; }
+	  
+	  .small-img .icon-left:hover, .small-img .icon-right:hover { opacity: .5; }
+	  
+	  .small-container {
+		width: 310px;
+		height: 70px;
+		overflow: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+	  }
+	  
+	  .small-container div {
+		width: 800%;
+		position: relative;
+	  }
+	  
+	  .small-container .show-small-img {
+		width: 70px;
+		height: 70px;
+		margin-right: 6px;
+		cursor: pointer;
+		float: left;
+	  }
+	  
+	  .small-container .show-small-img:last-of-type { margin-right: 0; }
+	 
+ </style>
 </head>
 
 <body>
@@ -162,16 +225,16 @@
 
 	<section class="section-content padding-y">
 		<div class="container">
-			<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-
+		
 			<div class="card">
+				
 				<div class="row no-gutters">
 					<aside class="col-lg-6">
 						<div class="show" style="z-index:9;" href="{{prod.image1.url}}">
-							<img src="{{prod.image1.url}}" id="show-img" style="margin: 10px;
+							<img src="{{prod.image1.url}}"  class="imageview" id="show-img" style="margin: 10px;
 										border: 1px solid black;">
 						</div>
-
+							
 
 						<div class="small-img">
 							<div class="small-container">
@@ -189,7 +252,7 @@
 
 					</aside>
 
-					<main class="col-lg-6 border-left">
+					<main class="col-lg-6 border-left"> 
 
 
 						<article class="content-body">

@@ -58,3 +58,7 @@
 }
 
 .small-container .show-small-img:last-of-type { margin-right: 0; }
+.imageview{
+  height: 300px;
+  width: 300px;
+}

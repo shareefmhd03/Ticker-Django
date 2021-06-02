@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     
+    
 ]
 
 MIDDLEWARE = [
@@ -92,15 +93,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'week8_project',
+        'NAME': config('DB_NAME'),
 
-        'USER': 'shareef',
+        'USER': config('DB_USER'),
 
-        'PASSWORD': 'aezakmi',
+        'PASSWORD': config('DB_PASSWORD'),
 
-        'HOST': 'localhost',
+        'HOST': config('DB_HOST'),
 
-        'PORT': '5432',
+        'PORT': config('DB_PORT'),
 
     }
 
