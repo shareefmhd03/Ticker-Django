@@ -8,7 +8,7 @@ from .utils import generate_ref_code
 
 
 class MyAccountManager(BaseUserManager):
-    def create_user(self, first_name, last_name, phone, email, password = None):
+    def create_user(self, first_name, last_name, email, password = None):
         if not email:
             raise ValueError("Email is required")
 
@@ -16,7 +16,7 @@ class MyAccountManager(BaseUserManager):
             email       = self.normalize_email(email),
             first_name  = first_name,
             last_name   = last_name,
-            phone       = phone,
+    
             
         )
         user.is_active     = True
@@ -26,7 +26,7 @@ class MyAccountManager(BaseUserManager):
 
 
 
-    def create_superuser(self, first_name, last_name, email, password):
+    def create_superuser(self, first_name, last_name, email, password,):
         user = self.create_user(
             email       = self.normalize_email(email),
             first_name  = first_name,
@@ -48,7 +48,7 @@ class Account(AbstractBaseUser):
      first_name     = models.CharField(max_length=50)
      last_name      = models.CharField(max_length=50)
      email          = models.EmailField(max_length=50, unique=True)
-     phone          = models.CharField(max_length=20)
+     phone          = models.CharField(max_length=20,blank = True, null=True)
      referral        = models.CharField(max_length=12, blank = True)
      
      date_joined    = models.DateTimeField(auto_now_add=True)
