@@ -158,7 +158,7 @@ def user_register(request, *args, **kwargs):
 
             
             profile_view(request, ref_code)  
-            user       = Account.objects.create_user(first_name = firstname, last_name = lastname, email = email, phone = phone, password = password)
+            user       = Account.objects.create_user(first_name = firstname, last_name = lastname, email = email, password = password)
             user.phone = phone
 
             profile_id = request.session.get('ref_profile')  
