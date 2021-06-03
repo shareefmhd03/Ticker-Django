@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 from typing import cast
-import psycopg2
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
