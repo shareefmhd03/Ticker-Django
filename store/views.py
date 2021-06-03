@@ -130,7 +130,7 @@ def product_view(request,category_slug,product_slug):
         'reviews': reviews,
     }
 
-    return render(request, 'user/product_view.html', context)
+    return render(request, 'user/product_View.html', context)
 
 
 
