@@ -48,7 +48,7 @@ class Account(AbstractBaseUser):
      first_name     = models.CharField(max_length=50)
      last_name      = models.CharField(max_length=50)
      email          = models.EmailField(max_length=50, unique=True)
-     phone          = models.CharField(max_length=20,blank = True, null=True)
+     phone          = models.CharField(max_length=20)
      referral        = models.CharField(max_length=12, blank = True)
      
      date_joined    = models.DateTimeField(auto_now_add=True)

@@ -188,7 +188,7 @@ def user_register(request, *args, **kwargs):
                 # return redirect('user_register')
                 
         # print(request.session.get_expiry_date())
-            
+        user.save()
         return redirect('user_login')
     else:
         form = RegistrationForm 
@@ -636,7 +636,7 @@ def otp_login(request):
             otp = random.randint(100000,999999)
             strotp=str(otp)
             account_sid ='AC2ceccd0b4c15e5d74f012550232f80b7'
-            auth_token ='f9b6407c929416f60de5b0ff190665a8'
+            auth_token ='580e4199348168f8dad6ec879bc643eb'
             client = Client(account_sid, auth_token)
 
             message = client.messages \
