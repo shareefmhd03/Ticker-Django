@@ -127,7 +127,7 @@ def user_login(request):
                 return redirect('home')  
                
         else:   
-            messages.info(request,'invalid credentials')
+            messages.info(request,'invalid credenttials')
             return redirect('user_login')
     return render(request, 'user/login.html')
     
@@ -528,6 +528,7 @@ def admin_login(request):
                 request.session['loggedin'] = True 
                 return redirect( 'admin_home')
             else:
+                messages.info('invalid credentials')
                 return redirect('admin_login')
         except:
             pass
