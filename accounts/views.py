@@ -127,6 +127,7 @@ def user_login(request):
                 return redirect('home')  
                
         else:   
+            messages.info(request,'invalid credentials')
             return redirect('user_login')
     return render(request, 'user/login.html')
     
