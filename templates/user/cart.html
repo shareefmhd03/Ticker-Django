@@ -27,7 +27,7 @@
 								<th scope="col">Product</th>
 								<th scope="col" width="120">Quantity</th>
 								<th scope="col" width="120">Price</th>
-								<th scope="col" class="text-right" width="200"> </th>
+								<th scope="col" width="120"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -47,7 +47,7 @@
 								</td>
 								<td>
 									<!-- col.// -->
-									<div class="col">
+									
 										<div class="input-group input-spinner">
 											<div class="input-group-prepend">
 												<button 
@@ -68,7 +68,7 @@
 													{% endif %}
 												</div>
 										</div>
-									</div>
+								
 								</td>
 								<td>
 									<div class="price-wrap">
@@ -78,15 +78,16 @@
 									</div> <!-- price-wrap .// -->
 								</td>
 								<td class="text-right">
-									<a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger">
-										Remove</a>
+									<a href="{% url 'delete_cart_item' cart_item.product.id %}" class="btn btn-danger">Remove</a>
+										
 								</td>
-							</tr>
+						</tr>
 							{%endfor%}
-
 						</tbody>
 					</table>
-				</div>
+					</div>
+						
+		
 
 			</aside> 
 			<aside class="col-lg-3">
@@ -97,7 +98,6 @@
 							<dt>Total price:</dt>
 							<dd id="grand_total" class="text-right">{{grand_total}}</dd>
 						</dl>
-
 
 						<hr>
 						<p class="text-center mb-3">
@@ -110,8 +110,8 @@
 
 			</aside>
 
-
-		</div>{% endif %}
+	{% endif %}
+		</div>
 		<!-- ============================ COMPONENT 1 END .// ================================= -->
 
 	</div> 

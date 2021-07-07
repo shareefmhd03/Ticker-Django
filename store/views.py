@@ -188,7 +188,67 @@ def edit_product(request, slug):
             form = AddProduct(request.POST, request.FILES, instance=product)
 
             if form.is_valid():
-                form.save()
+                print('valid')
+                p_name = form.cleaned_data['product_name']
+                slug = form.cleaned_data['slug']
+                price = form.cleaned_data['price']
+                image1 = request.POST['pro_img1']
+                image2 = request.POST['pro_img2']
+                image3 = request.POST['pro_img3']
+                image4 = request.POST['pro_img4']
+                description = form.cleaned_data['description']
+                category = request.POST['category']
+                stock = form.cleaned_data['stock']
+                brand = form.cleaned_data['brand']
+                gender = form.cleaned_data['gender']
+                strap_colour = form.cleaned_data['strap_colour']
+                water_resistance = form.cleaned_data['water_resistance']
+                analogue_or_digital = form.cleaned_data['analogue_or_digital']
+                glass = form.cleaned_data['glass']
+                strap_type = form.cleaned_data['strap_type']
+                model_name = form.cleaned_data['model_name']
+
+                format, img1 = image1.split(';base64,')
+                ext = format.split('/')[-1]
+                img_data1 = ContentFile(base64.b64decode(
+                    img1), name=p_name + '1.' + ext)
+
+                format, img2 = image2.split(';base64,')
+                ext = format.split('/')[-1]
+                img_data2 = ContentFile(base64.b64decode(
+                    img2), name=p_name + '2.' + ext)
+
+                format, img3 = image3.split(';base64,')
+                ext = format.split('/')[-1]
+                img_data3 = ContentFile(base64.b64decode(
+                    img3), name=p_name + '3.' + ext)
+
+                format, img4 = image4.split(';base64,')
+                ext = format.split('/')[-1]
+                img_data4 = ContentFile(base64.b64decode(
+                    img4), name=p_name + '4.' + ext)
+
+                product.product_name=p_name
+                product.slug=slug 
+                product.price=price
+                product.image1=img_data1
+                product.image2=img_data2 
+                product.image3=img_data3 
+                product.image4=img_data4 
+                product.description=description 
+                product.category_id=category 
+                product.stock=stock                                  
+                product.brand=brand
+                product.gender=gender 
+                product.strap_colour=strap_colour
+                product.water_resistance=water_resistance
+                product.analogue_or_digital=analogue_or_digital
+                product.glass=glass
+                product.strap_type=strap_type
+                product.model_name=model_name
+
+                product.save()
+  
                 return redirect('product_management')
 
         return render(request, 'admin/update_product.html', {'form': form, 'categ': cat})
@@ -372,7 +432,8 @@ def weekly_report(request):
     if request.method == 'POST':
         date_from = request.POST['from']
         date_upto = request.POST['upto']
-
+        print(date_from)
+    
         items = OrederProduct.objects.filter(
             created_at__gt=date_from, created_at__lt=date_upto).order_by('-created_at')
     else:
@@ -600,15 +661,18 @@ def del_coupon(request, id):
 
 
 def create_coupon(request):
-    if request.method == 'POST':
-        name = request.POST['coupon_name']
-        off = request.POST['off_percentage']
-        from_ = request.POST['valid_from']
-        upto = request.POST['valid_upto']
+    try:
+        if request.method == 'POST':
+            name = request.POST['coupon_name']
+            off = request.POST['off_percentage']
+            from_ = request.POST['valid_from']
+            upto = request.POST['valid_upto']
 
-        coup = Coupons(coupon_name=name, off_price=off,
-                       valid_from=from_, valid_upto=upto)
-        coup.save()
-        return redirect('coupon_management')
+            coup = Coupons(coupon_name=name, off_price=off,
+                        valid_from=from_, valid_upto=upto)
+            coup.save()
+            return redirect('coupon_management')
+    except:
+        pass
 
     return render(request, 'admin/add_coupon.html')
