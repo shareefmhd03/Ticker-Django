@@ -30,6 +30,7 @@ import twilio
 from twilio.rest import Client
 import random
 import datetime
+from decouple import config
 
 
 def session_check(request):
@@ -611,7 +612,7 @@ def otp_login(request):
             otp = random.randint(100000, 999999)
             strotp = str(otp)
             account_sid = 'AC2ceccd0b4c15e5d74f012550232f80b7'
-            auth_token = '7c8986529c254c7537197c24602b69d3'
+            auth_token = config('Auth_Token')
             client = Client(account_sid, auth_token)
 
             message = client.messages \
