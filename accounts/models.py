@@ -45,37 +45,37 @@ class MyAccountManager(BaseUserManager):
 
         
 class Account(AbstractBaseUser):
-     first_name     = models.CharField(max_length=50)
-     last_name      = models.CharField(max_length=50)
-     email          = models.EmailField(max_length=50, unique=True)
-     phone          = models.CharField(max_length=20)
-     referral        = models.CharField(max_length=12, blank = True)
-     
-     date_joined    = models.DateTimeField(auto_now_add=True)
-     last_login     = models.DateTimeField(auto_now_add=True)
-     is_admin       = models.BooleanField(default=False)
-     is_staff       = models.BooleanField(default=False)
-     is_active      = models.BooleanField(default=False)
-     is_superadmin  = models.BooleanField(default=False)
-
-
-     USERNAME_FIELD = 'email'
-     REQUIRED_FIELDS = ['first_name', 'last_name']  
-
-     objects = MyAccountManager()
-
-
-     def __str__(self):
-         return self.email
-
-     def has_perm(self, perm, obj=None):
-         return self.is_admin
+    first_name     = models.CharField(max_length=50)
+    last_name      = models.CharField(max_length=50)
+    email          = models.EmailField(max_length=50, unique=True)
+    phone          = models.CharField(max_length=20)
+    referral       = models.CharField(max_length=12, blank = True)
     
-     def has_module_perms(self, add_abel):
-         return True
+    date_joined    = models.DateTimeField(auto_now_add=True)
+    last_login     = models.DateTimeField(auto_now_add=True)
+    is_admin       = models.BooleanField(default=False)
+    is_staff       = models.BooleanField(default=False)
+    is_active      = models.BooleanField(default=False)
+    is_superadmin  = models.BooleanField(default=False)
 
-     def get_user(self):
-         return reverse('user_profile', args =[self.id])
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']  
+
+    objects = MyAccountManager()
+
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, add_abel):
+        return True
+
+    def get_user(self):
+        return reverse('user_profile', args =[self.id])
 
 
 class Address(models.Model):

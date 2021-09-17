@@ -413,5 +413,4 @@ def validate_coupon(request):
         'val': CouponCode.objects.filter(user=request.user, coupon_name=code, valid=True).exists(),
     }
     print(data['valid'])
-
     return JsonResponse(data)

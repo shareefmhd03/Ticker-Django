@@ -46,7 +46,6 @@ def user_login(request):
         email = request.POST['email']
         password = request.POST['password']
         user = auth.authenticate(request, email=email, password=password)
-
         use = Account.objects.get(email=email)
         if use.is_active == False:
             messages.info(request, use.first_name + ' is blocked')
@@ -529,11 +528,7 @@ def admin_home(request):
         order_cancelled = order_cancel.count()
         order_pending = order_pend.count()
         order_placed = order_place.count()
-        print('--------')
-        print('placed', order_placed)
-        print('--------')
-        print(order_complete)
-
+      
         # users = Account.objects.exclude(is_superadmin = 1, is_admin = 1).order_by('-id')
         users = Account.objects.filter(date_joined__lte=datetime.datetime.today(
         ), date_joined__gt=datetime.datetime.today()-datetime.timedelta(days=7))
